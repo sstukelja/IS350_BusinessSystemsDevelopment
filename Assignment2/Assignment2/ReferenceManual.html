@@ -1,0 +1,83 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Reference Manual</title>
+    <style>
+        body{
+            width: 1024px;
+        }
+
+        h1{
+            font-size: 18pt;
+            color: navy;
+            font-family: Arial;
+        }
+
+        h2{
+            font-size: 16pt;
+            color: navy;
+            font-family: Arial;
+        }
+        code{
+            background-color: #ffe6e6;
+            color: #330000;
+            font: monospace;
+        }
+
+    </style>
+</head>
+<body>
+    <nav>
+        <hr />
+        <table>
+            <tr>
+                <td style="border: 2px solid #ddd"><a href="./Index.html">Home</a></td>
+                <td style="border: 2px solid #ddd"><a href="./Table1.html">Table 1</a></td>
+                <td style="border: 2px solid #ddd"><a href="./Table2.html">Table 2</a></td>
+            </tr>
+        </table>
+        <hr />
+        <table>
+            <tr>
+                <td style="border: 2px solid #ddd"><a href="#B1">Abstract</a></td>
+                <td style="border: 2px solid #ddd"><a href="#B2">Details</a></td>
+                <td style="border: 2px solid #ddd"><a href="#B3">Examples</a></td>
+            </tr>
+        </table>
+        <hr />
+    </nav>
+
+    <article>
+    <h1>Reference Manual</h1>
+    <h2 id="B1">Abstract</h2>
+        <p>
+                The anchor tag is used to create a link between pages.
+                The <code>href</code> attribute determines the destination of the link.
+                This tag can be used to create local links, links to other websites, or
+                even bookmarks to different sections of the same page. Other relevant attributes
+                of the anchor tag include <code>target</code>, <code>img</code>, and <code>id</code>.
+            </p>
+    <h2 id="B2">Details</h2>
+        <ul>
+                <li><code>download</code> - Target will be downloaded once the hyperlink is clicked.</li>
+                <li><code>href</code> - URL of the linked page.</li>
+                <li><code>hreflang</code> - Specifies the language of the linked document.</li>
+                <li><code>media</code> - Specifies what media or device the linked document is optimized for.</li>
+                <li><code>rel</code> - Defines the relationship between the current document and the linked document.</li>
+                <li><code>target</code> - Specifies where to open the linked document.
+                <li><code>type</code> - Specifies the media type of the linked document.</li>
+            </ul>
+    <h2 id="B3">Examples</h2>
+        <p> Example for relative link:</p>
+        <code> &lt;a href=&quot;./<i>RelativePageName</i>.html&quot;&gt;<i>Link Name</i>&lt;/a&gt;</code>
+        <br />
+        <p> Example for absolute link:</p>
+        <code> &lt;a href=&quot;<i>https://www.google.com</i>&quot;&gt;<i>Link Name</i>&lt;/a&gt;</code>
+        <p> Example for adjusting target of link:</p>
+        <code> &lt;a href=&quot;./<i>RelativePageName.html</i>&quot; target=<i>_blank</i>&gt;<i>Link Name</i>&lt;/a&gt;</code>
+    </article>
+    <hr />
+    <img src="./RefManualVal.png" alt="W3C Validation">
+</body>
+</html>

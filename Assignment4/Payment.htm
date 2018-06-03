@@ -1,0 +1,60 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="./css/global.css" />
+    <script>
+        function btnCalculatePayment_Click()
+        {
+            var v = document.getElementById("spnNumericVariables");
+            var payment = (document.getElementById("txtInterestRate").value / 12 * document.getElementById("txtInitialLoanAmount").value) / (1 - (Math.pow(1 + document.getElementById("txtInterestRate").value / 12, document.getElementById("txtNumberOfPeriods").value * -12)));
+            v.innerHTML = "Payment is $" + payment.toFixed(2).toString() + ".";
+        }
+    </script>
+</head>
+<body>
+    <div>
+        <nav>
+            <hr />
+            <table>
+                <tr>
+                    <td><a href="./Index.htm">Home</a></td>
+                    <td><a href="./Afford.htm">Afford</a></td>
+                    <td><a href="./CompoundInterest.htm">Compound Interest</a></td>
+                    <td id="current"><a href="./Payment.htm">Payment</a></td>
+                </tr>
+            </table>
+            <hr />
+        </nav>
+    </div>
+
+    <fieldset>
+        <legend>Payment on Loan</legend>
+
+        <table>
+            <tr>
+                <td>Initial Loan Amount:</td>
+                <td><input type="number" id="txtInitialLoanAmount" /></td>
+            </tr>
+            <tr>
+                <td>Number of Periods (Years):</td>
+                <td><input type="number" id="txtNumberOfPeriods" /></td>
+            </tr>
+            <tr>
+                <td>Interest Rate (Years):</td>
+                <td><input type="number" id="txtInterestRate" /></td>
+            </tr>
+            <tr>
+                <td>
+                    <input id="btnCalculatePayment" type="button" value="Calculate Payment"
+                           onclick="btnCalculatePayment_Click()" />
+                </td>
+                <td>
+                    <span id="spnNumericVariables"></span>
+                </td>
+            </tr>
+        </table>
+    </fieldset>
+</body>
+</html>

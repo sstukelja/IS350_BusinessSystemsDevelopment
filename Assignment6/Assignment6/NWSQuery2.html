@@ -1,0 +1,169 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="./css/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="./css/bootstrap-grid.css" />
+    <link rel="stylesheet" type="text/css" href="./css/global.css" />
+    <script>
+        var categoryList;
+        var locationList;
+
+        function clearSelect1() {
+            // clears select
+            var divTable = document.getElementById("resultCategories");
+            if (divTable.lastChild != null) {
+                divTable.removeChild(divTable.lastChild);
+            }
+        }
+
+        function clearSelect2() {
+            // clears select
+            var divTable = document.getElementById("resultLocations");
+            if (divTable.lastChild != null) {
+                divTable.removeChild(divTable.lastChild);
+            }
+        }
+
+        function btnFetch_Click() {
+            clearSelect1();
+
+            var req = new XMLHttpRequest;
+            req.open("GET", "https://www.ncdc.noaa.gov/cdo-web/api/v2/datacategories", true);
+            req.setRequestHeader("token", "vczOaCmkCxBVQHkKGXeVcGoNcrzjdBab");
+            req.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    categoryList = JSON.parse(this.responseText);
+
+
+                    var result = document.getElementById("resultCategories");
+                    var list = document.createElement("select");
+                    list.onchange = function () {
+                        clearSelect2();
+
+                        var req2 = new XMLHttpRequest;
+                        req2.open("GET", "https://www.ncdc.noaa.gov/cdo-web/api/v2/locations?datacategoryid=" + list.value, true);
+                        req2.setRequestHeader("token", "vczOaCmkCxBVQHkKGXeVcGoNcrzjdBab");
+                        req2.onreadystatechange = function () {
+                            if (this.readyState == 4 && this.status == 200) {
+                                locationList = JSON.parse(req2.responseText);
+
+                                var locations = document.getElementById("resultLocations");
+
+                                // result table for locations
+                                var table = document.createElement("table");
+
+                                // header for table
+                                var header = document.createElement("thead");
+                                var headerRow = document.createElement("tr");
+                                var header1 = document.createElement("th");
+                                var header2 = document.createElement("th");
+                                var header3 = document.createElement("th");
+                                var header4 = document.createElement("th");
+                                var header5 = document.createElement("th");
+
+                                header1.innerHTML = "datacoverage";
+                                header2.innerHTML = "id";
+                                header3.innerHTML = "maxdate";
+                                header4.innerHTML = "mindate";
+                                header5.innerHTML = "name";
+
+                                headerRow.appendChild(header1);
+                                headerRow.appendChild(header2);
+                                headerRow.appendChild(header3);
+                                headerRow.appendChild(header4);
+                                headerRow.appendChild(header5);
+                                header.appendChild(headerRow);
+
+                                // table body
+                                var body = document.createElement("tbody");
+
+                                for (var i = 0; i < locationList.results.length; i++) {
+                                    var row = document.createElement("tr");
+                                    var data1 = document.createElement("td");
+                                    var data2 = document.createElement("td");
+                                    var data3 = document.createElement("td");
+                                    var data4 = document.createElement("td");
+                                    var data5 = document.createElement("td");
+
+                                    data1.innerHTML = locationList.results[i].datacoverage;
+                                    data2.innerHTML = locationList.results[i].id;
+                                    data3.innerHTML = locationList.results[i].maxdate;
+                                    data4.innerHTML = locationList.results[i].mindate;
+                                    data5.innerHTML = locationList.results[i].name;
+
+                                    row.appendChild(data1);
+                                    row.appendChild(data2);
+                                    row.appendChild(data3);
+                                    row.appendChild(data4);
+                                    row.appendChild(data5);
+                                    body.appendChild(row);
+                                }
+
+                                table.appendChild(header);
+                                table.appendChild(body);
+                                locations.appendChild(table);
+                            }
+                        }
+                        req2.send();
+
+                    };
+
+                    for (var i = 0; i < categoryList.results.length; i++) {
+                        var options = document.createElement("option");
+                        options.innerHTML = categoryList.results[i].id;
+                        list.appendChild(options);
+                    }
+                    result.appendChild(list);
+                }
+            }
+            req.send();
+        }
+    </script>
+</head>
+<body>
+    <div>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <nav>
+                        <hr />
+                        <table>
+                            <tr>
+                                <td><a href="./Index.html">Home</a></td>
+                                <td><a href="./YQLgeoPlaces.html">YQLgeoPlaces</a></td>
+                                <td><a href="./NWSQuery1.html">NWSQuery1</a></td>
+                                <td id="current"><a href="./NWSQuery2.html">NWSQuery2</a></td>
+                                <td><a href="./NWSQuery3.html">NWSQuery3</a></td>
+                            </tr>
+                        </table>
+                        <hr />
+                    </nav>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="col-lg-12">
+                <div class="row">
+                    <input type="button" value="Fetch Data Categories" onclick="btnFetch_Click()" />
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div id="resultCategories"> </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div id="resultLocations"> </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>

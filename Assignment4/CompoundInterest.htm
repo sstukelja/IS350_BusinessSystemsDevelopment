@@ -1,0 +1,67 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="./css/global.css" />
+    <script>
+        function btnCalculateInterest_Click()
+        {
+            var v = document.getElementById("spnNumericVariables");
+            var currentBalance = parseFloat(document.getElementById("txtInitialInvestmentAmount").value);
+
+            for (var i = 0; i < document.getElementById("txtNumberOfPeriods").value*12; i++)
+            {
+                var interest = currentBalance * document.getElementById("txtInterestRatePerPeriod").value/12;
+                currentBalance = currentBalance + interest;
+            }
+
+            v.innerHTML = "New balance with interest is $" + currentBalance.toFixed(2).toString() + ".";
+        }
+    </script>
+</head>
+<body>
+    <div>
+        <nav>
+            <hr />
+            <table>
+                <tr>
+                    <td><a href="./Index.htm">Home</a></td>
+                    <td><a href="./Afford.htm">Afford</a></td>
+                    <td id="current"><a href="./CompoundInterest.htm">Compound Interest</a></td>
+                    <td><a href="./Payment.htm">Payment</a></td>
+                </tr>
+            </table>
+            <hr />
+        </nav>
+    </div>
+
+    <fieldset>
+        <legend>Compound Interest on Investment</legend>
+
+        <table>
+            <tr>
+                <td>Initial Investment Amount:</td>
+                <td><input type="number" id="txtInitialInvestmentAmount" /></td>
+            </tr>
+            <tr>
+                <td>Number of Periods:</td>
+                <td><input type="number" id="txtNumberOfPeriods" /></td>
+            </tr>
+            <tr>
+                <td>Interest Rate Per Period:</td>
+                <td><input type="number" id="txtInterestRatePerPeriod" /></td>
+            </tr>
+            <tr>
+                <td>
+                    <input id="btnCalculateInterest" type="button" value="Calculate Interest"
+                           onclick="btnCalculateInterest_Click()" />
+                </td>
+                <td>
+                    <span id="spnNumericVariables"></span>
+                </td>
+            </tr>
+        </table>
+    </fieldset>
+</body>
+</html>

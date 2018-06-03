@@ -1,0 +1,153 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="./css/global.css" />
+    <script>
+        function clearTable()
+        {
+            var divTable = document.getElementById("PHTable");
+            if (divTable.lastChild != null) {
+                divTable.removeChild(divTable.lastChild);
+            }
+        }
+
+
+        function btnCalculateSchedule_Click()
+        {
+            clearTable();
+            var loanAmount = parseInt(document.getElementById("txtLoanAmount").value);
+            var MPR = document.getElementById("txtAPR").value / 12;
+            var loanTerm = document.getElementById("txtLoanTerm").value * 12;
+
+            // table components and header row
+            var tbdy = document.createElement('tbody');
+            var tr1 = document.createElement('tr');
+            var th1 = document.createElement('th');
+            th1.innerHTML = "Beginning Balance";
+            var th2 = document.createElement('th');
+            th2.innerHTML = "Payment";
+            var th3 = document.createElement('th');
+            th3.innerHTML = "Current Interest";
+            var th4 = document.createElement('th');
+            th4.innerHTML = "Current Principal";
+            var th5 = document.createElement('th');
+            th5.innerHTML = "New Balance";
+            var th6 = document.createElement('th');
+            th6.innerHTML = "Period";
+
+            tr1.appendChild(th1);
+            tr1.appendChild(th2);
+            tr1.appendChild(th3);
+            tr1.appendChild(th4);
+            tr1.appendChild(th5);
+            tr1.appendChild(th6);
+            tbdy.appendChild(tr1);
+
+            // payment
+            var payment1 = (document.getElementById("txtAPR").value / 1200 * document.getElementById("txtLoanAmount").value);
+            var payment2 = (1 - (Math.pow(1 + document.getElementById("txtAPR").value / 1200, document.getElementById("txtLoanTerm").value * -12)));
+            var payment = (payment1 / payment2).toFixed(2);
+
+            // first data row
+            var trow = document.createElement('tr');
+            var td1 = document.createElement('td');
+            td1.innerHTML = txtLoanAmount.value;
+            var td2 = document.createElement('td');
+            td2.innerHTML = payment;
+            var td3 = document.createElement('td');
+            td3.innerHTML = (parseFloat(td1.innerHTML) * parseFloat(MPR) / 100).toFixed(2);
+            var td4 = document.createElement('td');
+            td4.innerHTML = (parseFloat(payment) - parseFloat(td3.innerHTML)).toFixed(2);
+            var td5 = document.createElement('td');
+            td5.innerHTML = (parseFloat(td1.innerHTML) - parseFloat(td4.innerHTML)).toFixed(2);
+            var td6 = document.createElement('td');
+            td6.innerHTML = "1";
+
+
+            trow.appendChild(td1);
+            trow.appendChild(td2);
+            trow.appendChild(td3);
+            trow.appendChild(td4);
+            trow.appendChild(td5);
+            trow.appendChild(td6);
+            tbdy.appendChild(trow);
+
+            for (i = 1; i < loanTerm; i++)
+            {
+                var lastRow = tbdy.lastChild.childNodes;
+                var trow = document.createElement('tr');
+                var td1 = document.createElement('td');
+                td1.innerHTML = parseFloat(lastRow[4].innerHTML);
+                var td2 = document.createElement('td');
+                td2.innerHTML = payment;
+                var td3 = document.createElement('td');
+                td3.innerHTML = (parseFloat(td1.innerHTML) * parseFloat(MPR) / 100).toFixed(2);
+                var td4 = document.createElement('td');
+                td4.innerHTML = (parseFloat(payment) - parseFloat(td3.innerHTML)).toFixed(2);
+                var td5 = document.createElement('td');
+                td5.innerHTML = (parseFloat(td1.innerHTML) - parseFloat(td4.innerHTML)).toFixed(2);
+                var td6 = document.createElement('td');
+                td6.innerHTML = i+1;
+
+
+                trow.appendChild(td1);
+                trow.appendChild(td2);
+                trow.appendChild(td3);
+                trow.appendChild(td4);
+                trow.appendChild(td5);
+                trow.appendChild(td6);
+                tbdy.appendChild(trow);
+            }
+            var divTable = document.getElementById("PHTable");
+            var tbl = document.createElement('table');
+            tbl.setAttribute("style", "border-collapse: separate;");
+            tbl.appendChild(tbdy);
+            divTable.appendChild(tbl);
+        }
+    </script>
+</head>
+<body>
+    <div>
+        <nav>
+            <hr />
+            <table>
+                <tr>
+                    <td id="current"><a href="./Index.html">Home</a></td>
+                </tr>
+            </table>
+            <hr />
+        </nav>
+    </div>
+
+    <fieldset>
+        <legend>Loan Amortization Schedule</legend>
+
+        <table>
+            <tr>
+                <td>Loan Amount:</td>
+                <td><input type="number" id="txtLoanAmount" /></td>
+            </tr>
+            <tr>
+                <td>Annual Interest Rate (eg. 10 for 10%)</td>
+                <td><input type="number" id="txtAPR" /></td>
+            </tr>
+            <tr>
+                <td>Loan Term (Years)</td>
+                <td><input type="number" id="txtLoanTerm" /></td>
+            </tr>
+            <tr>
+                <td>
+                    <input id="btnCalculateSchedule" type="button" value="Calculate Schedule"
+                           onclick="btnCalculateSchedule_Click()" />
+                </td>
+            </tr>
+        </table>
+    </fieldset>
+
+    <div id="PHTable">
+
+    </div>
+</body>
+</html>

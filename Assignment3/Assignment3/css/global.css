@@ -1,0 +1,32 @@
+﻿body {
+    margin-right: auto;
+    margin-left: auto;
+    width: 1024px;
+    text-align: center;
+    align-content: center;
+}
+
+nav table {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+nav td{
+    border-collapse: separate;
+    border-style: solid;
+    border-width: 2px;
+    border-color: #0247FE;
+    border-radius: 5px;
+    background: linear-gradient(#66B032, #E3F7D4);
+    box-shadow: #347B98 2px 2px;
+}
+
+#current {
+    font-weight: bold;
+    color: black;
+}
+
+aside{
+    float: right;
+    width: 200px;
+}

@@ -1,0 +1,220 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="./css/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="./css/bootstrap-grid.css" />
+    <link rel="stylesheet" type="text/css" href="./css/global.css" />
+    <script>
+        var dataTypeList;
+        var categoryList;
+        var locationList;
+
+        loadDataTypes();
+        loadLocations();
+
+        function loadDataTypes() {
+            var req = new XMLHttpRequest;
+            req.open("GET", "https://www.ncdc.noaa.gov/cdo-web/api/v2/datatypes", true);
+            req.setRequestHeader("token", "vczOaCmkCxBVQHkKGXeVcGoNcrzjdBab");
+            req.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    dataTypeList = JSON.parse(this.responseText);
+                    var selectList = document.getElementById("selectDataTypeID");
+                    var noOption = document.createElement("option");
+                    noOption.innerHTML = "N/A";
+                    selectList.appendChild(noOption);
+
+                    for (var i = 0; i < dataTypeList.results.length; i++) {
+                        var option = document.createElement("option");
+                        option.innerHTML = dataTypeList.results[i].id;
+                        selectList.appendChild(option);
+                    }
+                }
+            }
+            req.send();
+        }
+
+        function loadLocations() {
+            var req = new XMLHttpRequest;
+            req.open("GET", "https://www.ncdc.noaa.gov/cdo-web/api/v2/locations", true);
+            req.setRequestHeader("token", "vczOaCmkCxBVQHkKGXeVcGoNcrzjdBab");
+            req.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    locationList = JSON.parse(this.responseText);
+                    var selectList = document.getElementById("selectLocationID");
+                    var noOption = document.createElement("option");
+                    noOption.innerHTML = "N/A";
+                    selectList.appendChild(noOption);
+
+                    for (var i = 0; i < locationList.results.length; i++) {
+                        var option = document.createElement("option");
+                        option.innerHTML = locationList.results[i].id;
+                        selectList.appendChild(option);
+                    }
+                }
+            }
+            req.send();
+        }
+
+
+        function clearSelect1() {
+            // clears select
+            var divTable = document.getElementById("resultCategories");
+            if (divTable.lastChild != null) {
+                divTable.removeChild(divTable.lastChild);
+            }
+        }
+
+        function btnFetch_Click() {
+            clearSelect1();
+
+            var query_params = new Array(
+                document.getElementById("txtStartDate").value,
+                '&enddate=' + document.getElementById("txtEndDate").value,
+                '&datatypeid=' + document.getElementById("selectDataTypeID").value,
+                '&locationid=' + document.getElementById("selectLocationID").value,               
+            );
+
+            var base_uri = "https://www.ncdc.noaa.gov/cdo-web/api/v2/data?datasetid=GHCND&startdate=";
+
+            for (var i = 0; i < query_params.length; i++) {
+                if (query_params[i].substring(12,15) != "N/A")
+                    base_uri = base_uri + query_params[i];
+            }
+
+            var req = new XMLHttpRequest;
+            req.open("GET", base_uri, true);
+            req.setRequestHeader("token", "vczOaCmkCxBVQHkKGXeVcGoNcrzjdBab");
+            req.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    categoryList = JSON.parse(this.responseText);
+
+
+                    var result = document.getElementById("resultCategories");
+                    var list = document.createElement("select");
+                    var table = document.createElement("table");
+
+                        //table header
+                        var header = document.createElement("thead");
+                        var headerRow = document.createElement("tr");
+                        var header1 = document.createElement("th");
+                        var header2 = document.createElement("th");
+                        var header3 = document.createElement("th");
+                        var header4 = document.createElement("th");
+                        var header5 = document.createElement("th");
+
+                        header1.innerHTML = "Attributes";
+                        header2.innerHTML = "Datatype";
+                        header3.innerHTML = "Date";
+                        header4.innerHTML = "Station";
+                        header5.innerHTML = "Value";
+
+                        headerRow.appendChild(header1);
+                        headerRow.appendChild(header2);
+                        headerRow.appendChild(header3);
+                        headerRow.appendChild(header4);
+                        headerRow.appendChild(header5);
+                        header.appendChild(headerRow);
+
+                        //table body
+                        var body = document.createElement("tbody");
+
+                        for (var i = 0; i < categoryList.results.length; i++) {
+                            var row = document.createElement("tr");
+                            var attribute = document.createElement("td");
+                            var datatype = document.createElement("td");
+                            var date = document.createElement("td");
+                            var station = document.createElement("td");
+                            var value = document.createElement("td");
+
+                            attribute.innerHTML = categoryList.results[i].attributes;
+                            datatype.innerHTML = categoryList.results[i].datatype;
+                            date.innerHTML = categoryList.results[i].date;
+                            station.innerHTML = categoryList.results[i].station;
+                            value.innerHTML = categoryList.results[i].value;
+
+                            row.appendChild(attribute);
+                            row.appendChild(datatype);
+                            row.appendChild(date);
+                            row.appendChild(station);
+                            row.appendChild(value);
+                            body.appendChild(row);
+                        }
+
+                        table.appendChild(header);
+                        table.appendChild(body);
+                        result.appendChild(table);
+                }
+            }
+            req.send();
+        }
+    </script>
+</head>
+<body>
+    <div>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <nav>
+                        <hr />
+                        <table>
+                            <tr>
+                                <td><a href="./Index.html">Home</a></td>
+                                <td><a href="./YQLgeoPlaces.html">YQLgeoPlaces</a></td>
+                                <td><a href="./NWSQuery1.html">NWSQuery1</a></td>
+                                <td><a href="./NWSQuery2.html">NWSQuery2</a></td>
+                                <td id="current"><a href="./NWSQuery3.html">NWSQuery3</a></td>
+                            </tr>
+                        </table>
+                        <hr />
+                    </nav>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <table>
+                        <tr>
+                            <td>DataTypeID:</td>
+                            <td><select id="selectDataTypeID"></select></td>
+                        </tr>
+                        <tr>
+                            <td>LocationID:</td>
+                            <td><select id="selectLocationID"></select></td>
+                        </tr>
+                        <tr>
+                            <td>StartDate (YYYY-MM-DD):</td>
+                            <td><input type="text" id="txtStartDate" /></td>
+                        </tr>
+                        <tr>
+                            <td>EndDate (YYYY-MM-DD):</td>
+                            <td><input type="text" id="txtEndDate" /></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <div class="container">
+                <div class="col-lg-12">
+                    
+                    <div class="row">
+                        <input type="button" value="Fetch GHCND Dataset" onclick="btnFetch_Click()" />
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div id="resultCategories"> </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</body>
+</html>

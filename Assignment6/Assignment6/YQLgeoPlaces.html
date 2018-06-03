@@ -1,0 +1,235 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="./css/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="./css/bootstrap-grid.css" />
+    <link rel="stylesheet" type="text/css" href="./css/global.css" />
+    <link href="./css/XMLDisplay.css" type="text/css" rel="stylesheet" />
+
+    <script type="text/javascript" src="./css/XMLDisplay.js"></script>
+    <script>
+        var nodeList;
+        var errorMessage = document.createTextNode("No results were found for the criteria specified.");        
+
+        function btnQuery_Click()
+        {
+            var query_params = new Array(
+                document.getElementById("txtLocationName").value,
+                ' ' + document.getElementById("txtCountry").value,
+                ' ' + document.getElementById("txtWOEID").value,
+                ' ' + document.getElementById("txtSWLat").value,
+                ' ' + document.getElementById("txtSWLong").value,
+                ' ' + document.getElementById("txtNELat").value,
+                ' ' + document.getElementById("txtNELong").value
+            );
+
+            var base_uri = "https://query.yahooapis.com/v1/public/yql?q=";
+            var yql_query = "SELECT * FROM geo.places WHERE text=\'";
+            var yql_format = "&format=xml";
+
+            for (var i = 0; i < query_params.length; i++)
+            {
+                if (query_params[i] != null)
+                    yql_query = yql_query + query_params[i];
+            }
+            yql_query = yql_query + '\'';
+
+            var full_query = base_uri + yql_query + yql_format;
+            
+            var req = new XMLHttpRequest();
+            req.open("GET", full_query, true);
+            req.onreadystatechange = function ()
+            {
+                if (this.readyState == 4 && this.status == 200) {
+                    nodeList = this.responseXML.getElementsByTagName("place");
+
+                    if (nodeList.length == 0)
+                    {
+                        clearTable();
+
+                        if (document.body.lastChild == errorMessage)
+                        {
+                            // do nothing
+                        }
+                        else
+                        {
+                            document.body.appendChild(errorMessage);
+                        }
+                    }
+                    else
+                    {
+                        createTable();
+                    }
+                }
+            }
+            req.send();
+
+            //LoadXML('XMLHolder', full_query);            
+        }
+
+        function clearTable()
+        {
+            // clears table and error message
+            var divTable = document.getElementById("resultTable");
+            if (divTable.lastChild != null)
+            {
+                divTable.removeChild(divTable.lastChild);
+            }
+            if (document.body.lastChild == errorMessage)
+            {
+                document.body.removeChild(document.body.lastChild);
+            }
+        }
+
+        function createTable()
+        {
+            // clear previous tables
+            clearTable();
+
+            // table header
+            var header = document.createElement('thead');
+            var headerRow = document.createElement('tr');
+            var header1 = document.createElement('th');
+            var header2 = document.createElement('th');
+            var header3 = document.createElement('th');
+            var header4 = document.createElement('th');
+            var header5 = document.createElement('th');
+            var header6 = document.createElement('th');
+            var header7 = document.createElement('th');
+
+            header1.innerHTML = 'Location Name';
+            header2.innerHTML = 'Country';
+            header3.innerHTML = 'WOEID';
+            header4.innerHTML = 'SW Latitude';
+            header5.innerHTML = 'SW Longitude';
+            header6.innerHTML = 'NE Latitude';
+            header7.innerHTML = 'NE Longitude';
+
+            headerRow.appendChild(header1);
+            headerRow.appendChild(header2);
+            headerRow.appendChild(header3);
+            headerRow.appendChild(header4);
+            headerRow.appendChild(header5);
+            headerRow.appendChild(header6);
+            headerRow.appendChild(header7);
+            header.appendChild(headerRow);
+
+            // table body
+            var body = document.createElement('tbody');
+
+            for (var i = 0; i < nodeList.length; i++)
+            {
+                var bodyRow = document.createElement('tr');
+                var cell1 = document.createElement('td');
+                var cell2 = document.createElement('td');
+                var cell3 = document.createElement('td');
+                var cell4 = document.createElement('td');
+                var cell5 = document.createElement('td');
+                var cell6 = document.createElement('td');
+                var cell7 = document.createElement('td');
+
+                cell1.innerHTML = nodeList[i].getElementsByTagName("name")[0].innerHTML;
+                cell2.innerHTML = nodeList[i].getElementsByTagName("country")[0].innerHTML;
+                cell3.innerHTML = nodeList[i].getElementsByTagName("woeid")[0].innerHTML;
+                cell4.innerHTML = nodeList[i].getElementsByTagName("boundingBox")[0].getElementsByTagName("southWest")[0].getElementsByTagName("latitude")[0].innerHTML;
+                cell5.innerHTML = nodeList[i].getElementsByTagName("boundingBox")[0].getElementsByTagName("southWest")[0].getElementsByTagName("longitude")[0].innerHTML;
+                cell6.innerHTML = nodeList[i].getElementsByTagName("boundingBox")[0].getElementsByTagName("northEast")[0].getElementsByTagName("latitude")[0].innerHTML;
+                cell7.innerHTML = nodeList[i].getElementsByTagName("boundingBox")[0].getElementsByTagName("northEast")[0].getElementsByTagName("longitude")[0].innerHTML;
+
+                bodyRow.appendChild(cell1);
+                bodyRow.appendChild(cell2);
+                bodyRow.appendChild(cell3);
+                bodyRow.appendChild(cell4);
+                bodyRow.appendChild(cell5);
+                bodyRow.appendChild(cell6);
+                bodyRow.appendChild(cell7);
+
+                body.appendChild(bodyRow);
+            }
+
+            var table = document.createElement("table");
+            table.setAttribute("style", "border-collapse: separate;");
+            table.appendChild(header);
+            table.appendChild(body);
+
+            document.getElementById("resultTable").appendChild(table);
+        }
+
+    </script>
+</head>
+<body>
+    <div>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <nav>
+                        <hr/>
+                        <table>
+                            <tr>
+                                <td><a href="./Index.html">Home</a></td>
+                                <td id="current"><a href="./YQLgeoPlaces.html">YQLgeoPlaces</a></td>
+                                <td><a href="./NWSQuery1.html">NWSQuery1</a></td>
+                                <td><a href="./NWSQuery2.html">NWSQuery2</a></td>
+                                <td><a href="./NWSQuery3.html">NWSQuery3</a></td>
+                            </tr>
+                        </table>
+                        <hr/>
+                    </nav>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">                  
+                    <table>
+                        <tr>
+                            <td>Location Name:</td>
+                            <td><input type="text" id="txtLocationName" /></td>
+                        </tr>
+                        <tr>
+                            <td>Country:</td>
+                            <td><input type="text" id="txtCountry" /></td>
+                        </tr>
+                        <tr>
+                            <td>WOEID:</td>
+                            <td><input type="number" id="txtWOEID" /></td>
+                        </tr>
+                        <tr>
+                            <td>SW Latitude:</td>
+                            <td><input type="number" id="txtSWLat" /></td>
+                        </tr>
+                        <tr>
+                            <td>SW Longitude:</td>
+                            <td><input type="number" id="txtSWLong" /></td>
+                        </tr>
+                        <tr>
+                            <td>NE Latitude:</td>
+                            <td><input type="number" id="txtNELat" /></td>
+                        </tr>
+                        <tr>
+                            <td>NE Longitude:</td>
+                            <td><input type="number" id="txtNELong" /></td>
+                        </tr>
+                    </table>           
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <input type="button" value="Query" onclick="btnQuery_Click()" />
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <div id="resultTable"> </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>

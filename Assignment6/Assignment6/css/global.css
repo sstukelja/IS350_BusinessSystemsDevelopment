@@ -1,0 +1,42 @@
+﻿body {
+    background: radial-gradient(circle, #8BB5EA, #D4E4F7);
+    margin-right: auto;
+    margin-left: auto;
+    width: 1024px;
+    text-align: center;
+    align-content: center;
+}
+
+table {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+nav td {
+    border-collapse: separate;
+    border-style: solid;
+    border-width: 2px;
+    border-color: #190934;
+    border-radius: 5px;
+    background: linear-gradient(#D4E4F7, #236AB9);
+    box-shadow: #5A18C9 2px 2px;
+}
+
+nav td a {
+    color: black;
+}
+
+#current {
+    font-weight: bold;
+}
+
+fieldset legend {
+    font-weight: bold;
+    font-size: 20pt;
+    text-decoration: underline;
+}
+
+input {
+    display: block;
+    margin: 0 auto;
+}
